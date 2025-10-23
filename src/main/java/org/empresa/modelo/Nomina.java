@@ -6,14 +6,14 @@ public class Nomina {
     private int id;
     private int empleadoId;
     private double salario;
-    private String fechaPago;
-    private LocalDate horasTrabajadas;
+    private LocalDate fechaPago;
+    private int horasTrabajadas;
 
-    public Nomina(){
+    public Nomina() {
 
     }
 
-    public Nomina(int id, int empleadoId, double salario, String fechaPago, LocalDate horasTrabajadas) {
+    public Nomina(int id, int empleadoId, double salario, LocalDate fechaPago, int horasTrabajadas) {
         this.id = id;
         this.empleadoId = empleadoId;
         this.salario = salario;
@@ -45,19 +45,19 @@ public class Nomina {
         this.salario = salario;
     }
 
-    public String getFechaPago() {
+    public LocalDate getFechaPago() {
         return fechaPago;
     }
 
-    public void setFechaPago(String fechaPago) {
+    public void setFechaPago(LocalDate fechaPago) {
         this.fechaPago = fechaPago;
     }
 
-    public LocalDate getHorasTrabajadas() {
+    public int getHorasTrabajadas() {
         return horasTrabajadas;
     }
 
-    public void setHorasTrabajadas(LocalDate horasTrabajadas) {
+    public void setHorasTrabajadas(int horasTrabajadas) {
         this.horasTrabajadas = horasTrabajadas;
     }
 }

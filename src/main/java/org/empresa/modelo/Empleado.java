@@ -2,9 +2,9 @@ package org.empresa.modelo;
 
 public class Empleado {
 
-private int id;
-private String nombre;
-private String dni;
+    private int id;
+    private String nombre;
+    private String dni;
 
     public Empleado() {
     }
