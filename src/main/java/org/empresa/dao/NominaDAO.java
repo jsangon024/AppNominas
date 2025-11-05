@@ -11,6 +11,10 @@ public class NominaDAO {
 
     private DBConnector dbConnector;
 
+    public NominaDAO() {
+        dbConnector = new DBConnector();
+    }
+
     public List<Nomina> listarNominas() {
         List<Nomina> listaNominas = new ArrayList<>();
         String consulta = "SELECT * FROM nomina";

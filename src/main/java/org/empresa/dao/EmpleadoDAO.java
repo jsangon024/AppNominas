@@ -14,6 +14,10 @@ public class EmpleadoDAO {
 
     private DBConnector dbConnector;
 
+    public EmpleadoDAO() {
+        dbConnector = new DBConnector();
+    }
+
     public List<Empleado> listarEmpleados() {
         List<Empleado> empleados = new ArrayList<>();
         String consulta = "SELECT * FROM empleados";
@@ -68,6 +72,50 @@ public class EmpleadoDAO {
             conn = dbConnector.getConnection();
             stmt = conn.prepareStatement(consulta);
             stmt.setInt(1, id);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                empleado.setId(rs.getInt("id"));
+                empleado.setDni(rs.getString("dni"));
+                empleado.setNombre(rs.getString("nombre"));
+            } else {
+                System.out.println("No se pudo encontrar el empleado");
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error a encontrar empleados: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            dbConnector.closeConnection();
+        }
+        return empleado;
+    }
+
+    public Empleado buscarPorDNI(String dni) {
+        Empleado empleado = new Empleado();
+        String consulta = "SELECT * FROM empleados WHERE dni= ?";
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+
+            conn = dbConnector.getConnection();
+            stmt = conn.prepareStatement(consulta);
+            stmt.setString(1, dni);
             rs = stmt.executeQuery();
 
             if (rs.next()) {
