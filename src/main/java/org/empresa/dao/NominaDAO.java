@@ -14,6 +14,10 @@ public class NominaDAO {
     public NominaDAO() {
         dbConnector = new DBConnector();
     }
+    public void setDbConnector(DBConnector dbConnector) {
+        this.dbConnector = dbConnector;
+    }
+
 
     public List<Nomina> listarNominas() {
         List<Nomina> listaNominas = new ArrayList<>();

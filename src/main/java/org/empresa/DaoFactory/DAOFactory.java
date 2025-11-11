@@ -2,14 +2,21 @@ package org.empresa.DaoFactory;
 
 import org.empresa.dao.EmpleadoDAO;
 import org.empresa.dao.NominaDAO;
+import org.empresa.dbconnector.DBConnector;
 
 public class DAOFactory {
 
-    public static EmpleadoDAO getEmpleadoDAO(){
-        return new EmpleadoDAO();
+    private static final DBConnector dbConnector = new DBConnector();
+
+    public static EmpleadoDAO getEmpleadoDAO() {
+        EmpleadoDAO empleadoDAO = new EmpleadoDAO();
+        empleadoDAO.setDbConnector(dbConnector);
+        return empleadoDAO;
     }
 
-    public static NominaDAO getNominaDao(){
-        return new NominaDAO();
+    public static NominaDAO getNominaDAO() {
+        NominaDAO nominaDAO = new NominaDAO();
+        nominaDAO.setDbConnector(dbConnector);
+        return nominaDAO;
     }
 }

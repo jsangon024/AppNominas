@@ -25,66 +25,80 @@ public class FrontController extends HttpServlet {
         List<Empleado> listaEmpleados = empleadoDao.listarEmpleados();
         //Guardamos la lista en la request con la clave "empleados"
         request.setAttribute("empleados",listaEmpleados);
+        request.setAttribute("titulo", "Listado de Empleados");
+        request.setAttribute("contenido", "/mostrarDatosEmpleados.jsp");
         // 3) Reenviamos (forward) la request a la JSP que muestra la lista
 
-        RequestDispatcher dispatcher=request.getRequestDispatcher("/mostrarDatosEmpleados.jsp");
-        dispatcher.forward(request,response);
+        /*RequestDispatcher dispatcher=request.getRequestDispatcher("/mostrarDatosEmpleados.jsp");
+        dispatcher.forward(request,response);*/
     } else if (opcion.equals("buscarSalario")){
-        RequestDispatcher dispatcher=request.getRequestDispatcher("/buscarSalario.jsp");
-        dispatcher.forward(request,response);
+        /*RequestDispatcher dispatcher=request.getRequestDispatcher("/buscarSalario.jsp");
+        dispatcher.forward(request,response);*/
+        request.setAttribute("titulo", "Buscar Salario");
+        request.setAttribute("contenido", "/buscarSalario.jsp");
 
     } else if(opcion.equals("editarEmpleado")){
-        RequestDispatcher dispatcher= request.getRequestDispatcher("/buscarEmpleado.jsp");
-        dispatcher.forward(request,response);
+        /*RequestDispatcher dispatcher= request.getRequestDispatcher("/buscarEmpleado.jsp");
+        dispatcher.forward(request,response);*/
+        request.setAttribute("titulo", "Buscar Empleado");
+        request.setAttribute("contenido", "/buscarEmpleado.jsp");
     }
+        request.getRequestDispatcher("/plantilla.jsp").forward(request,response);
     }
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String opcion = request.getParameter("opcionPost");
+        DAOFactory factory = new DAOFactory();
+        EmpleadoDAO empleadoDao = factory.getEmpleadoDAO();
+        NominaDAO nominaDAO = factory.getNominaDAO();
+
+        String vista = "/plantilla.jsp"; // 👈 Plantilla principal
+        String contenido = "";        // 👈 JSP parcial que se mostrará dentro
 
         if ("buscarSalario".equals(opcion)) {
+            // 🔹 Buscar salario por DNI
             String dni = request.getParameter("dni");
-
-            EmpleadoDAO empleadoDao = DAOFactory.getEmpleadoDAO();
-            NominaDAO nominaDAO = DAOFactory.getNominaDao();
-
             int id = empleadoDao.buscarPorDNI(dni).getId();
             Double salario = nominaDAO.buscarNominaPorID(id).getSalario();
 
             request.setAttribute("salario", salario);
             request.setAttribute("dni", dni);
 
-            request.getRequestDispatcher("/buscarSalario.jsp").forward(request, response);
+            contenido = "/buscarSalario.jsp";
 
         } else if ("buscarEmpleado".equals(opcion)) {
-            EmpleadoDAO empleadoDAO = DAOFactory.getEmpleadoDAO();
+            // 🔹 Buscar empleado por DNI
             String dni = request.getParameter("dni");
-
-            Empleado empleado = empleadoDAO.buscarPorDNI(dni);
-            request.setAttribute("dni",dni);
+            Empleado empleado = empleadoDao.buscarPorDNI(dni);
+            request.setAttribute("dni", dni);
 
             if (empleado != null && empleado.getId() != 0) {
                 request.setAttribute("empleado", empleado);
-
             } else {
                 request.setAttribute("mensaje", "No se encontró ningún empleado con ese DNI");
             }
 
-            request.getRequestDispatcher("/buscarEmpleado.jsp").forward(request, response);
+            contenido = "/buscarEmpleado.jsp";
 
         } else if ("editarEmpleado".equals(opcion)) {
-            EmpleadoDAO empleadoDAO = DAOFactory.getEmpleadoDAO();
+            // 🔹 Actualizar datos del empleado
             int id = Integer.parseInt(request.getParameter("id"));
             String nombre = request.getParameter("nombre");
             String dni = request.getParameter("dni");
 
             Empleado e = new Empleado(id, nombre, dni);
-            boolean actualizado = empleadoDAO.actualizar(e);
+            boolean actualizado = empleadoDao.actualizar(e);
 
             request.setAttribute("mensaje",
                     actualizado ? "Empleado actualizado correctamente" : "No se pudo actualizar el empleado");
 
-            request.getRequestDispatcher("/buscarEmpleado.jsp").forward(request, response);
+            contenido = "/buscarEmpleado.jsp";
         }
+
+        // ✅ Pasamos el fragmento que debe incluirse
+        request.setAttribute("contenido", contenido);
+
+        // ✅ Enviamos siempre a la plantilla general
+        request.getRequestDispatcher(vista).forward(request, response);
     }}
 

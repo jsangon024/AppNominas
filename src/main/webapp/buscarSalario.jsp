@@ -1,3 +1,19 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<h2>Buscar salario por DNI</h2>
+<form action="front" method="post">
+    <label>DNI:</label>
+    <input type="text" name="dni" required>
+    <input type="hidden" name="opcionPost" value="buscarSalario">
+    <button type="submit">Consultar salario</button>
+</form>
+
+<c:if test="${not empty salario}">
+    <h3>Resultado</h3>
+    <p><strong>DNI:</strong> ${dni}</p>
+    <p><strong>Salario:</strong> ${salario} €</p>
+</c:if>
+
 <%--
   Created by IntelliJ IDEA.
   User: Usuario
@@ -5,7 +21,7 @@
   Time: 20:01
   To change this template use File | Settings | File Templates.
 --%>
-
+<%--
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
@@ -28,7 +44,7 @@
 <c:if test="${not empty dni}">
     <h2>Resultado de la búsqueda</h2>
 
-    <%-- Mostramos el DNI y el salario que nos pasó el servlet --%>
+    <%-- Mostramos el DNI y el salario que nos pasó el servlet
     <p><strong>DNI:</strong> ${dni}</p>
     <p><strong>Salario:</strong> ${salario} €</p>
 </c:if>
@@ -37,3 +53,4 @@
 
 </body>
 </html>
+--%>

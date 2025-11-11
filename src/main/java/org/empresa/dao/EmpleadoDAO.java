@@ -14,6 +14,11 @@ public class EmpleadoDAO {
 
     private DBConnector dbConnector;
 
+    public void setDbConnector(DBConnector dbConnector) {
+        this.dbConnector = dbConnector;
+    }
+
+
     public EmpleadoDAO() {
         dbConnector = new DBConnector();
     }
